@@ -4,5 +4,6 @@
 app/build/
 app/bin/
 .vscode/
+.project
 # Ignore Gradle build output directory
 build
