@@ -25,13 +25,19 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
     implementation("org.springframework.boot:spring-boot-starter-web")
     // Spring Boot 依賴管理
     implementation("org.springframework.boot:spring-boot-starter")
-    
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     // 可選：JSON 解析工具（如 Jackson）
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    implementation("org.hibernate.orm:hibernate-core:6.6.12.Final")
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -43,7 +49,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "com.recasakura.App"
+    mainClass = "com.recasakura.sellbackend.App"
 }
 
 tasks.named<Test>("test") {
