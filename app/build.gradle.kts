@@ -35,9 +35,13 @@ dependencies {
     // 可選：JSON 解析工具（如 Jackson）
     implementation("com.fasterxml.jackson.core:jackson-databind")
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-    implementation("org.hibernate.orm:hibernate-core:6.6.12.Final")
+    // implementation("org.hibernate.orm:hibernate-core:6.6.12.Final")
     // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.3")
+    // implementation("org.mariadb.jdbc:mariadb-java-client:3.5.3")
+    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-community-dialects
+    implementation("org.hibernate.orm:hibernate-community-dialects:6.6.12.Final")
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
