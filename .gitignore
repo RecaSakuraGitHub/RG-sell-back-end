@@ -6,5 +6,6 @@ app/bin/
 .vscode/
 .project
 .classpath
+SellBackEnd.db
 # Ignore Gradle build output directory
 build
