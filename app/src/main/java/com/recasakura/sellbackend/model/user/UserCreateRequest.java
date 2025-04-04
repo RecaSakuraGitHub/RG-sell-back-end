@@ -6,11 +6,7 @@ public class UserCreateRequest {
     private String phone;
 
     public UserCreateRequest(){}
-    public UserCreateRequest(String name, String email, String phone) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-    }
+
     public String getName() { return this.name; }
     public String getEmail() { return this.email; }
     public String getPhone() { return this.phone; }
