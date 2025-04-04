@@ -8,6 +8,7 @@ import com.recasakura.sellbackend.exception.UserAlreadyExistsException;
 import com.recasakura.sellbackend.exception.UserNotFoundException;
 import com.recasakura.sellbackend.model.user.*;
 import com.recasakura.sellbackend.repository.UserRepository;
+import com.recasakura.sellbackend.repository.projection.UserProjection;
 
 @Service
 public class UserService {
@@ -16,7 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserCreateRequest request) {
+    public UserResponse createUser(UserCreateRequest request) {
         if (userExistsByEmailAndPhone(request.getEmail(), request.getPhone())) {
             throw new UserAlreadyExistsException("The email and phone is already exists.");
         } else if (userExitstsByEmail(request.getEmail())) {
@@ -25,15 +26,17 @@ public class UserService {
             throw new UserAlreadyExistsException("The phone is already exists.");
         }
         User user = new User(request.getName(), request.getEmail(), request.getPhone());
-        return this.userRepository.save(user);
+        UserResponse responseUser = new UserResponse(this.userRepository.save(user));
+        return responseUser;
     }
 
-    public List<User> getUsers() {
-        return this.userRepository.findAll();
+    public List<UserProjection> getAllUsers() {
+        return this.userRepository.findAllBy();
     }
 
-    public User getUserById(Long id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+    public UserResponse getUserById(Long id) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        return new UserResponse(user);
     }
 
     public boolean userExistsByEmailAndPhone(String email, String phone) {
