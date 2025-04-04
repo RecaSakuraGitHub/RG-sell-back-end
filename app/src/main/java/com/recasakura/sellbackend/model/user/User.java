@@ -1,4 +1,4 @@
-package com.recasakura.sellbackend.model;
+package com.recasakura.sellbackend.model.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
