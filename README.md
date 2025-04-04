@@ -1,5 +1,6 @@
 ## 2025-04-04 專案進展
 ### 結構概述
+```
 sellbackend/
 ├── App.java
 ├── controller
@@ -23,6 +24,7 @@ sellbackend/
 └── service
     └── UserService.java ***新功能UserService*** 新增UserService，專門處理User的業務邏輯
 
+```
 ### 我學到了什麼？
 1. 練習DTO pattern，轉換相關資料
  使用UserCreateRequest與UserResponse分別隱藏傳入與傳出時具體User的數據，防止隱私暴露給前端。<br>
