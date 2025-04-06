@@ -1,6 +1,50 @@
+# 目標成果
+建立基礎電商系統，包含**User**、**Product**等資料庫。
+## 結構概述
+***前端*** **WordPress**-搭建網頁界面，並使用簡單**JS**語句與中間層**n8n**溝通。<br>
+***中間層*** **n8n**-讓前端能夠統一格式，利用**n8n**往後串接與解藕，簡單的與不同**API**做溝通。<br>
+***後端*** 採用**Java**的**Spring Boot**搭建-運行相關業務邏輯與資料庫處理。<br>
+***部屬位置*** 前後端皆架設在筆者自家的迷你電腦上。<br>
+
 ## 2025-04-06 專案進展
 1. 自行製造**git**遠端與本地端衝突，並使用**git**指令解決該衝突，而非用**IDE**處理。
 2. 修改**UserController**，將原本回傳字串修改成回傳**UserResponse**。
+
+```
+git fetch backup main // 使用fetch拉下最新程式
+git merge FETCH_HEAD // 開始合併
+git status // 發生衝突確認檔案
+nvim README.md
+// 衝突檔案為README.md，因此使用編輯器編輯並解決衝突
+git add README.md
+git commit -m "merge(backup/main): sync remote change from GitHub"
+git merge FETCH_HEAD // 完成衝突後再度merge
+```
+
+## 2025-04-05 專案進展
+1. 在**WordPress**上添加文章，作為前端網頁。<br>
+2. 使用n8n通一將**GET**、**POST**請求統一合併成**POST**，根據**JSON**格式中含有的**process**參數選擇相應的**API**。<br>
+
+```
+原請求建立使用者為:
+{
+    "name": "RecaSakura",
+    "email": "recasakura@gmail.com",
+    "phone": "0912345678"
+}
+改為:
+{
+    "process": "createUser",
+    "name": "RecaSakura",
+    "email": "recasakura@gmail.com",
+    "phone": "0912345678"
+}
+```
+### 我學到了什麼？
+1. 利用n8n簡化前後端的耦合，改成利用n8n來處理不同請求對應的API。
+### 可能或已發生的問題
+1. 業務複雜後對於n8n壓力會增大，高併發可能會出現速度過慢或崩潰的問題。<br>
+2. 對於某些可直接轉送給前端的回傳不符合n8n可接收的格式，須透額外透過n8n進行轉換，像是對exception的情況須額外做處理，增加複雜度。<br>
 
 ## 2025-04-04 專案進展
 ### 當前目錄結構
