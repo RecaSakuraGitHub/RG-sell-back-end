@@ -8,7 +8,6 @@ import com.recasakura.sellbackend.exception.UserAlreadyExistsException;
 import com.recasakura.sellbackend.exception.UserNotFoundException;
 import com.recasakura.sellbackend.model.user.*;
 import com.recasakura.sellbackend.repository.UserRepository;
-import com.recasakura.sellbackend.repository.projection.UserProjection;
 
 @Service
 public class UserService {
@@ -26,8 +25,17 @@ public class UserService {
             throw new UserAlreadyExistsException("The phone is already exists.");
         }
         User user = new User(request.getName(), request.getEmail(), request.getPhone());
-        UserResponse responseUser = new UserResponse(this.userRepository.save(user));
-        return responseUser;
+        UserResponse response = new UserResponse(this.userRepository.save(user));
+        return response;
+    }
+
+    public UserResponse deleteUser(UserDeleteRequest request) {
+        User user = this.userRepository.findByEmailAndPhone(request.getEmail(), request.getPhone()).orElseThrow(
+            () -> new UserNotFoundException()
+        );
+        UserResponse response = new UserResponse(user);
+        this.userRepository.delete(user);
+        return response;
     }
 
     public List<UserProjection> getAllUsers() {
