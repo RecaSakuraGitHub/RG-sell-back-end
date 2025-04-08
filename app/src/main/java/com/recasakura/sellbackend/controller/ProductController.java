@@ -5,30 +5,38 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.recasakura.sellbackend.model.Product;
-import com.recasakura.sellbackend.repository.ProductRepository;
+import com.recasakura.sellbackend.model.product.*;
+import com.recasakura.sellbackend.service.ProductService;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class ProductController {
-    private final ProductRepository productRepository;
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-    @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody Product product) {
-        this.productRepository.save(product);
-        return ResponseEntity.ok("product: " + product.getName() + " is created.");
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
+    @PostMapping
+    public ResponseEntity<ProductResponse> createProducts(@RequestBody ProductRequest request) {
+        ProductResponse response = this.productService.createProduct(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
+        ProductResponse response = this.productService.getProudct(id);
+        return ResponseEntity.ok(response);
+    }
     @GetMapping
-    public ResponseEntity<List<Product>> getProduct() {
-        return ResponseEntity.ok(this.productRepository.findAll());
+    public ResponseEntity<List<ProductProjection>> getProducts() {
+        return ResponseEntity.ok(this.productService.getProducts());
     }
 }
