@@ -9,16 +9,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-        UserAlreadyExistsException.class
+        UserAlreadyExistsException.class,
+        ProductAlreadyExistsException.class
     })
-    public ResponseEntity<String> handlerConflictException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    public ResponseEntity<ErrorResponse> handlerConflictException(RuntimeException e) {
+        return ResponseEntity.ok(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage()));
     }
 
     @ExceptionHandler({
-        UserNotFoundException.class
+        UserNotFoundException.class,
+        ProductNotFoundException.class
     })
-    public ResponseEntity<String> handleNotFoundException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException e) {
+        return ResponseEntity.ok(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
 }
