@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.recasakura.sellbackend.model.user.*;
-import com.recasakura.sellbackend.repository.projection.UserProjection;
 import com.recasakura.sellbackend.service.UserService;
 
 @RestController
@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest userCreateRequest) {
-        UserResponse user = this.userService.createUser(userCreateRequest);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest request) {
+        UserResponse user = this.userService.createUser(request);
         return ResponseEntity.ok(user);
     }
 
@@ -40,5 +40,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserProjection>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<UserResponse> deleteUser(@RequestBody UserDeleteRequest request) {
+        UserResponse response = this.userService.deleteUser(request);
+        return ResponseEntity.ok(response);
     }
 }
