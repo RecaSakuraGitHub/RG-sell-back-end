@@ -1,4 +1,4 @@
-package com.recasakura.sellbackend.model;
+package com.recasakura.sellbackend.model.product;
 
 import java.math.BigDecimal;
 
@@ -11,22 +11,27 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
+// Table name = products
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 50)
+    @Column(length = 10, nullable = false, unique = true)
     private String name;
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
+
+    public Product(){}
+    public Product(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
 
     public Long getId() { return this.id; }
     public String getName() { return this.name; }
     public BigDecimal getPrice() { return this.price; }
-
     public void setName(String name) {
-        this.name = name;
+        this.name = name; 
     }
     public void setPrice(BigDecimal price) {
         this.price = price;
