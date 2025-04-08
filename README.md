@@ -6,6 +6,24 @@
 ***後端*** 採用**Java**的**Spring Boot**搭建-運行相關業務邏輯與資料庫處理。<br>
 ***部屬位置*** 前後端皆架設在筆者自家的迷你電腦上。<br>
 
+## 2025-04-08 專案進展
+1. 新增 ProductController，並加入多種處理方法（新增、查詢、刪除等）。
+2. 新增 UserService 中對應方法，包含查詢所有使用者、依據 ID 查詢、建立新使用者等。
+3. 新增 ProductService，作為產品邏輯處理的服務層。
+4. 建立 UserDeleteRequest，在刪除使用者後保護使用者隱私。
+5. 新增 ProductRequest / ProductResponse / ProductProjection 三種資料傳輸類別以管理產品資料格式。
+6. 新增 UserProjection 並重新整理至 model/user/ 資料夾。
+7. 將 Product 模型類別移動至 model/product/ 資料夾。
+8. 將 GenerationType 從 AUTO 改為 IDENTITY，以符合資料庫自增主鍵邏輯。
+9. 新增 ProductAlreadyExistsException 與 ProductNotFoundException，處理產品相關錯誤狀況。
+10. 新增 ErrorResponse 統一錯誤回傳格式。
+11. 優化 UserRepository 與 ProductRepository 結構，增加多種查詢方法。
+12. 重構專案內部的 class 路徑與 package 結構，提升模組劃分清晰度。
+
+### 我學到了什麼?
+1. 今天將全部的Product結構整個移除重做，再度複習了整個流程，加深印象。
+2. 學習使用ErrorResponse來處理錯誤的回傳，讓中間層**n8n**不會需要針對錯誤處理時添加更多邏輯。
+
 ## 2025-04-06 專案進展
 1. 自行製造**git**遠端與本地端衝突，並使用**git**指令解決該衝突，而非用**IDE**處理。
 2. 修改**UserController**，將原本回傳字串修改成回傳**UserResponse**。
