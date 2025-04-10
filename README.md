@@ -6,6 +6,42 @@
 ***後端*** 採用**Java**的**Spring Boot**搭建-運行相關業務邏輯與資料庫處理。<br>
 ***部屬位置*** 前後端皆架設在筆者自家的迷你電腦上。<br>
 
+## 2025-04-10 專案進展
+
+#### 使用者登入與權限管理
+1. 新增登入功能，透過 Session 儲存使用者資訊。
+2. 在 Controller 中加入 Session 驗證機制，以根據使用者角色（如 ADMIN、USER）判斷是否具備執行操作的權限。
+3. 在 Service 層新增登入邏輯，並調整 createUser 與 deleteUser 方法的權限檢查。
+4. 增加 UnauthorizedException 與對應的錯誤處理機制，若使用者權限不足將回傳錯誤訊息。
+#### 購物車功能建置
+1. 新增 CartController 控制器來處理加入與查看購物車的 API。
+2. 建立 CartService 處理業務邏輯，並透過 Session 儲存購物車資料。
+3. 新增 CartAddRequest 與 CartItemResponse DTO，用於前端傳送加入商品的資訊與回傳購物車內容。
+#### 資料模型與 DTO 擴充
+1. 修改使用者資料模型，加入 role 欄位以識別權限。
+2. 新增登入用的 DTO 物件以接收前端登入請求。
+
+### 遇到了什麼問題?
+* 在使用 **Postman** 與 **n8n** 串接時，因為加入了 **session** 導致出現 **Spring Boot** 收不到 **JSESSIONID** 一直無法處理。
+
+### 怎麼解決?
+1. 使用 **ChatGPT** 詢問該錯誤 -> 依然無法處理。
+2. 從 **n8n** 社群查詢答案 -> 成功知道方法。
+
+### 解決方法
+* 在 **n8n** 的 **http** 請求區有提供 **Send Headers** ，將其打開後選擇 **Using JSON** 傳入以下格式:
+```
+{
+  "cookie": "此處放入JSESSIONID即可"
+}
+```
+* 以下是我的放法
+```
+{
+  "cookie": "{{ $json.headers.cookie }}"
+}
+
+```
 ## 2025-04-08 專案進展
 1. 新增 ProductController，並加入多種處理方法（新增、查詢、刪除等）。
 2. 新增 UserService 中對應方法，包含查詢所有使用者、依據 ID 查詢、建立新使用者等。
