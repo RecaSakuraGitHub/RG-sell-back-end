@@ -21,17 +21,22 @@ public class User {
     private String email;
     @Column(length = 10)
     private String phone;
+    @Column(length = 5, nullable = false)
+    private String role;
 
     public User(){}
-    public User(String name, String email, String phone) {
+    public User(String name, String email, String phone, String role) {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.role = role;
     }
+
     public Long getId() { return this.id; }
     public String getName() { return this.name; }
     public String getEmail() { return this.email; }
     public String getPhone() { return this.phone; }
+    public String getRole() { return this.role; }
 
     public void setName(String name) {
         this.name = name;
@@ -41,5 +46,8 @@ public class User {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }
