@@ -24,20 +24,25 @@ public class UserService {
         } else if (userExitstsByPhone(request.getPhone())) {
             throw new UserAlreadyExistsException("The phone is already exists.");
         }
-        User user = new User(request.getName(), request.getEmail(), request.getPhone());
+        User user = new User(request.getName(), request.getEmail(), request.getPhone(), request.getRole());
         UserResponse response = new UserResponse(this.userRepository.save(user));
         return response;
     }
 
-    public UserResponse deleteUser(UserDeleteRequest request) {
+    public User login(String email, String phone) {
+        User user = this.userRepository.findByEmailAndPhone(email, phone).orElseThrow(
+            () -> new UserNotFoundException()
+        );
+        return user;
+    }
+
+    public User deleteUser(UserDeleteRequest request) {
         User user = this.userRepository.findByEmailAndPhone(request.getEmail(), request.getPhone()).orElseThrow(
             () -> new UserNotFoundException()
         );
-        UserResponse response = new UserResponse(user);
-        this.userRepository.delete(user);
-        return response;
+        this.userRepository.deleteById(user.getId());
+        return user;
     }
-
     public List<UserProjection> getAllUsers() {
         return this.userRepository.findAllBy();
     }
