@@ -1,6 +1,7 @@
 package com.recasakura.sellbackend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.recasakura.sellbackend.model.user.*;
 import com.recasakura.sellbackend.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*")
@@ -25,12 +28,30 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest request) {
-        UserResponse user = this.userService.createUser(request);
-        return ResponseEntity.ok(user);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserCreateRequest request) {
+        this.userService.createUser(request);
+        return ResponseEntity.ok(Map.of("message", "user registered"));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginRequest request, HttpSession session) {
+        User user = this.userService.login(request.getEmail(), request.getPhone());
+        session.setAttribute("user", user);
+        return ResponseEntity.ok(Map.of("message", "login success"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(HttpSession session) {
+        UserResponse response = new UserResponse((User) session.getAttribute("user"));
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@RequestBody UserDeleteRequest request) {
+        User user = this.userService.deleteUser(request);
+        return ResponseEntity.ok(Map.of("message", "user: " + user.getName() + " deleted"));
+    } 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         UserResponse user = this.userService.getUserById(id);
@@ -40,11 +61,5 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserProjection>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
-    }
-
-    @DeleteMapping
-    public ResponseEntity<UserResponse> deleteUser(@RequestBody UserDeleteRequest request) {
-        UserResponse response = this.userService.deleteUser(request);
-        return ResponseEntity.ok(response);
     }
 }
