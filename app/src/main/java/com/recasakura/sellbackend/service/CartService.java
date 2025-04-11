@@ -27,6 +27,9 @@ public class CartService {
         if (cart == null) {
             cart = new HashMap<>();
         }
+        if (this.productRepository.findById(request.getProductId()).orElse(null) == null) {
+            return;
+        }
         cart.put(request.getProductId(), cart.getOrDefault(request.getProductId(), 0) + 1);
         session.setAttribute("cart", cart);
     }
