@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.recasakura.sellbackend.exception.UnLoginException;
+import com.recasakura.sellbackend.exception.UserNotFoundException;
 import com.recasakura.sellbackend.model.user.*;
 import com.recasakura.sellbackend.service.UserService;
 
@@ -29,8 +31,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserCreateRequest request) {
-        this.userService.createUser(request);
+    public ResponseEntity<?> register(@RequestBody UserCreateRequest request, HttpSession session) {
+        User user = this.userService.createUser(request);
+        session.setAttribute("user", user);
         return ResponseEntity.ok(Map.of("message", "user registered"));
     }
 
@@ -43,6 +46,9 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(HttpSession session) {
+        if ((User) session.getAttribute("user") == null) {
+            throw new UnLoginException();
+        }
         UserResponse response = new UserResponse((User) session.getAttribute("user"));
         return ResponseEntity.ok(response);
     }

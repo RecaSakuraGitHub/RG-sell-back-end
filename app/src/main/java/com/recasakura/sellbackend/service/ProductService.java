@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.recasakura.sellbackend.exception.ProductAlreadyExistsException;
 import com.recasakura.sellbackend.exception.ProductNotFoundException;
-import com.recasakura.sellbackend.exception.UnauthorizedException;
+import com.recasakura.sellbackend.exception.UserPermissionDenyException;
 import com.recasakura.sellbackend.model.product.*;
 import com.recasakura.sellbackend.model.user.User;
 import com.recasakura.sellbackend.repository.ProductRepository;
@@ -24,7 +24,7 @@ public class ProductService {
     public void checkAdmin(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null || !user.getRole().equals("ADMIN")) {
-            throw new UnauthorizedException();
+            throw new UserPermissionDenyException();
         }
     }
 
@@ -56,6 +56,9 @@ public class ProductService {
     }
 
     public List<ProductProjection> getProducts() {
+        if (this.productRepository.findAllBy().isEmpty()) {
+            return null;
+        }
         return this.productRepository.findAllBy();
     }
 
