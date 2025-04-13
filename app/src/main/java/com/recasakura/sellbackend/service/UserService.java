@@ -12,6 +12,7 @@ import com.recasakura.sellbackend.repository.UserRepository;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -58,6 +59,7 @@ public class UserService {
     public boolean userExistsByEmailAndPhone(String email, String phone) {
         return this.userRepository.findByEmailAndPhone(email, phone).isPresent();
     }
+
     public boolean userExitstsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }

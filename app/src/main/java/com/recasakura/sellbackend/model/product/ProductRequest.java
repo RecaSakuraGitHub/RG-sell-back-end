@@ -10,6 +10,7 @@ public class ProductRequest {
 
     public String getName() { return this.name; }
     public BigDecimal getPrice() { return this.price; }
+
     public void setName(String name) {
         this.name = name;
     }

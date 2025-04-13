@@ -57,7 +57,8 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@RequestBody UserDeleteRequest request) {
         User user = this.userService.deleteUser(request);
         return ResponseEntity.ok(Map.of("message", "user: " + user.getName() + " deleted"));
-    } 
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         UserResponse user = this.userService.getUserById(id);

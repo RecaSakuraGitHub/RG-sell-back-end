@@ -8,6 +8,7 @@ public class UserDeleteRequest {
 
     public String getEmail() { return this.email; }
     public String getPhone() { return this.phone; }
+
     public void setEmail(String email) {
         this.email = email;
     }

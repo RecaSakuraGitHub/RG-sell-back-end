@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler({
         UserAlreadyExistsException.class,
         ProductAlreadyExistsException.class
@@ -30,11 +29,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnLoginException(RuntimeException e) {
         return ResponseEntity.ok(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
     }
+
     @ExceptionHandler({
         UserPermissionDenyException.class
     })
     public ResponseEntity<ErrorResponse> handlePermissionDenyException(RuntimeException e) {
         return ResponseEntity.ok(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
-
 }
