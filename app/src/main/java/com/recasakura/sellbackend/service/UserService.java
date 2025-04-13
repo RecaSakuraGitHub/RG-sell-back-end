@@ -46,7 +46,7 @@ public class UserService {
 
     public List<UserProjection> getAllUsers() {
         if (this.userRepository.findAllBy().isEmpty()) {
-            return null;
+            throw new UserNotFoundException();
         }
         return this.userRepository.findAllBy();
     }
