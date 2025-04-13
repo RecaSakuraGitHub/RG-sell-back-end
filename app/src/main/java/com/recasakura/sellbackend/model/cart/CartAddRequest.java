@@ -1,20 +1,18 @@
 package com.recasakura.sellbackend.model.cart;
 
-import java.math.BigDecimal;
-
 public class CartAddRequest {
-    private Long productId;
-    private BigDecimal price;
+    private String name;
+    private Integer quantity;
 
     public CartAddRequest() {}
 
-    public Long getProductId() { return this.productId; }
-    public BigDecimal getPrice() { return this.price; }
+    public String getName() { return this.name; }
+    public Integer getQuantity() { return this.quantity; }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setName(String name) {
+        this.name = name;
     }
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
