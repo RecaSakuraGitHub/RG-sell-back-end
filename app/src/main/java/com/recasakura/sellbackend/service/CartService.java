@@ -33,7 +33,7 @@ public class CartService {
 
     public List<CartItemResponse> getCart(HttpSession session) {
         Map<Long, Integer> cart = (Map<Long, Integer>) session.getAttribute("cart");
-        if (cart == null) return List.of();
+        if (cart == null) return List.of(new CartItemResponse("cart is empty", 0, BigDecimal.ZERO));
         return cart.entrySet().stream()
             .map(entry -> {
                 Product product = this.productRepository.findById(entry.getKey()).orElse(null);
