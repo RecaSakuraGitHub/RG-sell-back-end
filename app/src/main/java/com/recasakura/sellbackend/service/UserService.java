@@ -16,7 +16,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse createUser(UserCreateRequest request) {
+    public User createUser(UserCreateRequest request) {
         if (userExistsByEmailAndPhone(request.getEmail(), request.getPhone())) {
             throw new UserAlreadyExistsException("The email and phone is already exists.");
         } else if (userExitstsByEmail(request.getEmail())) {
@@ -25,8 +25,7 @@ public class UserService {
             throw new UserAlreadyExistsException("The phone is already exists.");
         }
         User user = new User(request.getName(), request.getEmail(), request.getPhone(), request.getRole());
-        UserResponse response = new UserResponse(this.userRepository.save(user));
-        return response;
+        return this.userRepository.save(user);
     }
 
     public User login(String email, String phone) {
@@ -43,7 +42,11 @@ public class UserService {
         this.userRepository.deleteById(user.getId());
         return user;
     }
+
     public List<UserProjection> getAllUsers() {
+        if (this.userRepository.findAllBy().isEmpty()) {
+            return null;
+        }
         return this.userRepository.findAllBy();
     }
 
