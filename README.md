@@ -6,6 +6,76 @@
 ***後端*** 採用**Java**的**Spring Boot**搭建-運行相關業務邏輯與資料庫處理。<br>
 ***部屬位置*** 前後端皆架設在筆者自家的迷你電腦上。<br>
 
+## 2025-04-13 專案進展
+
+#### 新增購物車功能邏輯
+1. 使用者可以將商品加入購物車。
+2. 如果購物車為空時會簡單傳入購物車為空。
+3. 若商品不存在時嘗試加入購物車，會拋出處理流程。
+#### 使用者系統強化
+1. register 註冊成功時會回傳 session。
+2. UserResponse 中加入 role 欄位，供前端顯示權限使用。
+#### 錯誤與權限處理
+1. 新增 UnLoginException，處理使用者未登入的情況。
+2. 新增 UserPermissionDenyException，處理非管理員操作受限。
+3. 為以上例外新增 handleUnLoginException 與 handlePermissionDenyException handler。
+#### Exception 結構優化
+1. 調整語意UnauthorizedException 更名為 UserPermissionDenyException。
+2. 調整例外訊息開頭大寫。
+#### Model 優化
+1. CartItemResponse 中欄位 productId 改為 name 與 quantity(商品名稱、商品數量)。
+2. 將 price: BigDecimal 改為使用 quantity: Integer。
+#### Service 結果調整
+1. createUser() 的回傳型別從 UserResponse 改為 User。
+#### 修正加入購物車數量錯誤
+1. 修復原本無論傳入多少 quantity 都只加入一個商品的問題。
+### 遇到了什麼問題?
+1. 實際部屬在前端網頁時，向 **n8n** 發送請求時遭遇錯誤。
+### 鎖定問題
+1. 是不是前端處理邏輯錯誤 -> 不是。
+2. 是不是 **n8n** 處理邏輯失誤 -> 不是。
+3. 查找網頁 console 定位錯誤 -> 成功定位錯誤為 **CORS** 。
+### 排查錯誤歸屬
+1. **Spring Boot** 已經設定 @CrossOrigin(origin = "*") -> 不是 **Java** 後端的問題。
+2. **n8n** 沒有設定 **CORS** -> 應該是錯誤來源。
+### 怎麼修復?
+1. 使用 **n8n** 底下自帶的 **CORS** 方法處理方法 -> 失敗。
+2. 詢問 **ChatGPT** 查找處理方法 (在 **docker** 中加入 **CORS** 參數) -> 失敗。
+3. 上 **n8n** 社群查找錯誤 -> 得出使用反向代理 **nginx** 可解決跨域請求問題。
+### 修復步驟
+* 解決來源:[Allowed Origins (CORS) error](https://community.n8n.io/t/allowed-origins-cors-error/80385)
+* 但直接套用還是不行。
+```
+location /webhook/ {
+    proxy_pass http://localhost:5678;
+    add_header 'Access-Control-Allow-Origin' 'https://mywebsite.co.uk' always;
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+    add_header 'Access-Control-Allow-Headers' 'Content-Type' always;
+}
+```
+* 使用**ChatGPT**輔助成功解決 **CORS** 版本:
+```
+server {
+    server_name my.n8n.website.com;
+    listen 80;
+    location / {
+        proxy_pass https://localhost:5678;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+        # 避免重複的 CORS header（最關鍵）
+        proxy_hide_header Access-Control-Allow-Origin;
+        add_header Access-Control-Allow-Origin "https://my.website.com" always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "Content-Type" always;
+        add_header Access-Control-Allow-Credentials "true" always;
+    }
+}
+```
+
 ## 2025-04-10 專案進展
 
 #### 使用者登入與權限管理
