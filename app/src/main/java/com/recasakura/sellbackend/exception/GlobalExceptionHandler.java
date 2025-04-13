@@ -25,9 +25,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-        UnauthorizedException.class
+        UnLoginException.class
     })
-    public ResponseEntity<ErrorResponse> handleUnauthorizedException(RuntimeException e) {
-        return ResponseEntity.ok(new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage()));
+    public ResponseEntity<ErrorResponse> handleUnLoginException(RuntimeException e) {
+        return ResponseEntity.ok(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
     }
+    @ExceptionHandler({
+        UserPermissionDenyException.class
+    })
+    public ResponseEntity<ErrorResponse> handlePermissionDenyException(RuntimeException e) {
+        return ResponseEntity.ok(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+    }
+
 }
