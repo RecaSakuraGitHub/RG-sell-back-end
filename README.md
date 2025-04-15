@@ -1,11 +1,39 @@
-# 目標成果
-建立基礎電商系統，包含**User**、**Product**等資料庫。
-## 結構概述
-***前端*** **WordPress**-搭建網頁界面，並使用簡單**JS**語句與中間層**n8n**溝通。<br>
-***中間層*** **n8n**-讓前端能夠統一格式，利用**n8n**往後串接與解藕，簡單的與不同**API**做溝通。<br>
-***後端*** 採用**Java**的**Spring Boot**搭建-運行相關業務邏輯與資料庫處理。<br>
-***部屬位置*** 前後端皆架設在筆者自家的迷你電腦上。<br>
+# WordPress + Spring Boot 零售系統實作專案
+# 🌐專案簡介
+以 **WordPress** 為前端，**Spring Boot** 為後端開發的網路零售應用系統(電商)，簡化了使用者管理、商品操作、註冊/登入、購物車等功能。<br/>
+**作者有將遇到問題的除錯方式與步驟寫在[📝開發日誌](#Note)，歡迎去觀看，希望能幫助到你(因為那些錯誤作者都卡了很久)。**
+# 🎓學習目標
+* 經由一個前端簡單頁面到後端的系統開發
+* 實踐各種 **HTTP Request** 處理，包括 **RESTful** 設計
+* 會利用 **Session** 與 **Cookie** 環境控制登入狀態
+* 瞭解 **Spring Boot + n8n + WordPress** 實際串接
+# ⚖️技術組合
+* 後端: **Spring Boot(Java)**搭配 **Gradle**
+* 資料庫: **SQLite**
+* 前端: **WordPress** 中嵌入 **HTML/JS**
+* **Session: JSESSIONID + Cookie + CORS**
+# 💪功能流程
+## 使用者機制
+* 註冊：輸入姓名 / **email** / **phone** / 權限
+* 登入：依據 **email + phone** 驗證
+* 權限分類：**ADMIN 、 USER**
+* **Session** 維持：登入/註冊 成功回傳 **JSESSIONID (via Set-Cookie)**
+* **/me Webhook** 可查詢當前登入使用者資訊
+## 購物車 + 商品
+* 商品顯示: 登入後顯示正確商品清單
+* 購物車: 可添加商品，顯示商品數量、價格、名稱
+* 權限操作: 僅允許 **ADMIN** 新增與刪除商品。
+## 錯誤處理
+* 格式化錯誤訊息回傳: **ErrorResponse**
+* 管理回應 JSON + 狀態碼: **GlobalExceptionHandler**
+* 商品重複新增錯誤: **ProductAlreadyExistsException**
+* 商品不存在錯誤: **ProductNotFoundException**
+* 使用者未登入錯誤: **UnLoginException**
+* 使用者重複新增錯誤:**UserAlreadyExistsException**
+* 找不到使用者錯誤:**UserNotFoundException**
+* 使用者權限錯誤:**UserPermissionDenyException**
 
+# <h2 id = "Note">📝開發日誌</h2>
 ## 2025-04-13 專案進展
 
 #### 新增購物車功能邏輯
@@ -115,13 +143,13 @@ server {
 ## 2025-04-08 專案進展
 1. 新增 ProductController，並加入多種處理方法（新增、查詢、刪除等）。
 2. 新增 UserService 中對應方法，包含查詢所有使用者、依據 ID 查詢、建立新使用者等。
-3. 新增 ProductService，作為產品邏輯處理的服務層。
+3. 新增 ProductService，作為商品邏輯處理的服務層。
 4. 建立 UserDeleteRequest，在刪除使用者後保護使用者隱私。
-5. 新增 ProductRequest / ProductResponse / ProductProjection 三種資料傳輸類別以管理產品資料格式。
+5. 新增 ProductRequest / ProductResponse / ProductProjection 三種資料傳輸類別以管理商品資料格式。
 6. 新增 UserProjection 並重新整理至 model/user/ 資料夾。
 7. 將 Product 模型類別移動至 model/product/ 資料夾。
 8. 將 GenerationType 從 AUTO 改為 IDENTITY，以符合資料庫自增主鍵邏輯。
-9. 新增 ProductAlreadyExistsException 與 ProductNotFoundException，處理產品相關錯誤狀況。
+9. 新增 ProductAlreadyExistsException 與 ProductNotFoundException，處理商品相關錯誤狀況。
 10. 新增 ErrorResponse 統一錯誤回傳格式。
 11. 優化 UserRepository 與 ProductRepository 結構，增加多種查詢方法。
 12. 重構專案內部的 class 路徑與 package 結構，提升模組劃分清晰度。
